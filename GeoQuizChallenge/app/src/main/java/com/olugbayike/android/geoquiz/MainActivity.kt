@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         Question(R.string.question_asia, true)
     )
 
+    private val questionTodos = MutableList(questionBank.size) {false}
+
     private val answer = 0
     private var currentIndex = 0;
 
@@ -49,34 +51,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.trueButton.setOnClickListener { view: View ->
             checkAnswer(true)
-            if (binding.trueButton.isEnabled()){
-                binding.trueButton.setEnabled(false)
-            }
-            if (binding.falseButton.isEnabled()){
-                binding.falseButton.setEnabled(false)
-            }
         }
 
         binding.falseButton.setOnClickListener { view: View ->
             checkAnswer(false)
-            if (binding.trueButton.isEnabled()){
-                binding.trueButton.setEnabled(false)
-            }
-            if (binding.falseButton.isEnabled()){
-                binding.falseButton.setEnabled(false)
-            }
 
         }
 
         binding.nextButton.setOnClickListener {
             currentIndex = (currentIndex + 1) % questionBank.size
             updateQuestion()
-            if (!binding.trueButton.isEnabled()){
-                binding.trueButton.setEnabled(true)
-            }
-            if (!binding.falseButton.isEnabled()){
-                binding.falseButton.setEnabled(true)
-            }
         }
 
         updateQuestion()
@@ -119,9 +103,23 @@ class MainActivity : AppCompatActivity() {
     private fun updateQuestion(){
         val questionTextResId = questionBank[currentIndex].textResId
         binding.text.setText(questionTextResId)
+        updateAnswerButtons()
     }
 
 
+    private fun updateAnswerButtons(){
+        if(questionTodos[currentIndex]){
+            // question completed, disable answer buttons
+            binding.trueButton.isEnabled = false
+            binding.falseButton.isEnabled = false
+        }
+
+        else{
+            // question not completed, disable answer buttons
+            binding.trueButton.isEnabled = true
+            binding.falseButton.isEnabled = true
+        }
+    }
 
     private fun checkAnswer(userAnswer: Boolean){
         val correctAnswer = questionBank[currentIndex].answer
@@ -138,5 +136,9 @@ class MainActivity : AppCompatActivity() {
             messageResId,
             Snackbar.LENGTH_SHORT
         ).show()
+
+        // mark current question as completed, and update the answer buttons' state
+        questionTodos[currentIndex] = true;
+        updateAnswerButtons()
     }
 }
