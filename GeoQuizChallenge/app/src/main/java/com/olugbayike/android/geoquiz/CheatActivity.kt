@@ -3,6 +3,7 @@ package com.olugbayike.android.geoquiz
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -26,6 +27,8 @@ class CheatActivity: AppCompatActivity() {
         cheatViewModel.answerIsTrue = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
 
 
+        val apiLevel: Int = Build.VERSION.SDK_INT
+        binding.apiLevel.setText("API Level $apiLevel")
         binding.showAnswerButton.setOnClickListener {
             setCheatStatus()
             cheatViewModel.cheatButtonClick = true
