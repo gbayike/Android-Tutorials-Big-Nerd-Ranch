@@ -12,9 +12,9 @@ import java.util.UUID
 
 class CrimeDetailFragment: Fragment() {
 //    private lateinit var binding: FragmentCrimeDetailBinding
-    private lateinit var crime: Crime
-    private var _binding: FragmentCrimeDetailBinding? = null
-    private val binding
+    lateinit var crime: Crime
+    var _binding: FragmentCrimeDetailBinding? = null
+    val binding
         get() = checkNotNull(_binding){
             "Cannot access binding because it is null. Is the view visible?"
         }
