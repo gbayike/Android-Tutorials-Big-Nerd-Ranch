@@ -28,7 +28,7 @@ class CrimeDetailFragment: Fragment() {
             title = "",
             date = Date(),
             isSolved = false,
-            requiresPolice = false
+//            requiresPolice = false
         )
     }
 

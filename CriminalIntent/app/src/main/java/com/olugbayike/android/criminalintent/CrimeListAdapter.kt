@@ -26,7 +26,7 @@ class CrimeHolder(
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            binding.crimeSolved.visibility = if (crime.requiresPolice){
+            binding.crimeSolved.visibility = if (crime.isSolved){
                 View.VISIBLE
             }else{
                 View.GONE
