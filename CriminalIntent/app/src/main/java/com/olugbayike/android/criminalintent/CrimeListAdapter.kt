@@ -10,21 +10,23 @@ import com.google.android.material.snackbar.Snackbar
 import com.olugbayike.android.criminalintent.databinding.ListItemCrimeBinding
 import com.olugbayike.android.criminalintent.databinding.ListItemSeriousCrimeBinding
 import java.text.DateFormat
+import java.util.UUID
 
 class CrimeHolder(
     private val binding: ListItemCrimeBinding
 ): RecyclerView.ViewHolder(binding.root){
-    fun bind(crime: Crime){
+    fun bind(crime: Crime, onCrimeClicked: (crimeId: UUID) -> Unit){
 //        if(binding is ListItemCrimeBinding){
             binding.crimeTitle.text = crime.title
             binding.crimeDate.text = DateFormat.getDateInstance(DateFormat.FULL).format(crime.date).toString()
 
             binding.root.setOnClickListener {
-                Toast.makeText(
-                    binding.root.context,
-                    "${crime.title} clicked: : Normal Crime",
-                    Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    binding.root.context,
+//                    "${crime.title} clicked: : Normal Crime",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+                onCrimeClicked(crime.id)
             }
             binding.crimeSolved.visibility = if (crime.isSolved){
                 View.VISIBLE
@@ -51,7 +53,10 @@ class CrimeHolder(
     }
 }
 
-class CrimeListAdapter(private val crime: List<Crime>): RecyclerView.Adapter<CrimeHolder>(){
+class CrimeListAdapter(
+    private val crime: List<Crime>,
+    private val onCrimeClicked: (crimeId:UUID) -> Unit
+): RecyclerView.Adapter<CrimeHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
 
         val inflater = LayoutInflater.from(parent.context)
@@ -67,7 +72,7 @@ class CrimeListAdapter(private val crime: List<Crime>): RecyclerView.Adapter<Cri
 
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
         val crime = crime[position]
-        holder.bind(crime)
+        holder.bind(crime, onCrimeClicked)
     }
 
 //    override fun getItemViewType(position: Int): Int {
