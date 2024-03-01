@@ -5,12 +5,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.olugbayike.android.criminalintent.databinding.FragmentCrimeDetailBinding
 import kotlinx.coroutines.flow.collect
@@ -35,9 +39,35 @@ class CrimeDetailFragment: Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // This callback is only called when MyFragment is at least started
+
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Back is pressed... Finish the activity
+                // Handle the back button event
+                Log.d(TAG, "Value of crime title is ${binding.crimeTitle.text.toString()}")
+                if (binding.crimeTitle.text.toString().isEmpty()){
+                    binding.crimeTitle.setHint(R.string.crime_title_needed)
+                }
+                else{
+                    Log.d(TAG, "Activated Finish on the activity")
+                    val navController = Navigation.findNavController(requireView())
+                    navController.popBackStack(R.id.crimeDetailFragment2,true)
+                    Log.d(TAG, "Finished the activity")
+                }
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
+//        requireActivity().onBackPressedDispatcher.addCallback(this /* lifecycle owner */, callback)
+
+
+
+
         Log.d(TAG, "The crime id id: ${args.crimeId}")
     }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
