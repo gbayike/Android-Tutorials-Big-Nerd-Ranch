@@ -111,8 +111,20 @@ class CrimeDetailFragment: Fragment() {
         ){ _, bundle ->
             val newDate =
                 bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
+            Log.d(TAG, "KEY_DATE: ${newDate}")
             crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
         }
+
+        setFragmentResultListener(
+            TimePickerFragment.REQUEST_KEY_TIME
+        ){ _, bundle ->
+            val newTime =
+                bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME)
+            Log.d(TAG, "KEY_TIME: ${newTime}")
+            binding.time.setText(newTime.toString())
+//            crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
+        }
+
     }
 
     override fun onDestroyView() {
@@ -131,6 +143,12 @@ class CrimeDetailFragment: Fragment() {
             crimeDate.setOnClickListener {
                 findNavController().navigate(
                     CrimeDetailFragmentDirections.selectDate(crime.date)
+                )
+            }
+
+            time.setOnClickListener {
+                findNavController().navigate(
+                    CrimeDetailFragmentDirections.selectTime(binding.time.text.toString())
                 )
             }
             crimeSolved.isChecked = crime.isSolved
