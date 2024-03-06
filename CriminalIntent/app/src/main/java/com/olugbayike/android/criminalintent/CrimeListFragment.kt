@@ -4,17 +4,25 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.shape.MaterialShapeDrawable
 import com.olugbayike.android.criminalintent.databinding.FragmentCrimeListBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.util.Date
+import java.util.UUID
 
 private const val TAG = "CrimeListFragment"
 class CrimeListFragment : Fragment() {
@@ -40,7 +48,6 @@ class CrimeListFragment : Fragment() {
         _binding = FragmentCrimeListBinding.inflate(inflater, container, false)
 
         binding.crimeRecyclerView.layoutManager = LinearLayoutManager (context)
-
 //        val crimes = crimeListViewModel.crimes
 //        val adapter = CrimeListAdapter(crimes)
 //        binding.crimeRecyclerView.adapter = adapter
@@ -68,6 +75,55 @@ class CrimeListFragment : Fragment() {
             }
 
         }
+
+//        val menuHost = requireActivity()
+//        menuHost.addMenuProvider(object : MenuProvider {
+//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//                menuInflater.inflate(R.menu.fragment_crime_list, menu)
+//            }
+//
+//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                return when (menuItem.itemId){
+//                    R.id.new_crime -> {
+//                        Log.d(TAG, "new crime pressed")
+//                        true
+//                    }
+//                    else -> false
+//                }
+//
+//            }
+//        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        binding.topAppBar.setNavigationOnClickListener {
+            // Handle navigation icon press
+        }
+
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId){
+                    R.id.new_crime -> {
+                        Log.d(TAG, "new crime pressed")
+                        showNewCrime()
+                        true
+                    }
+                    else -> false
+                }
+        }
+
+    }
+
+    private fun showNewCrime() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val newCrime = Crime(
+                id = UUID.randomUUID(),
+                title = "",
+                date = Date(),
+                isSolved = false
+            )
+            crimeListViewModel.addCrime(newCrime)
+            findNavController().navigate(
+                CrimeListFragmentDirections.showCrimeDetail(newCrime.id)
+            )
+        }
     }
 
 //    Using coroutines on life cycle methods onStart() and on Stop().
@@ -88,4 +144,9 @@ class CrimeListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+//    }
+
 }
