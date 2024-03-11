@@ -42,6 +42,10 @@ class CrimeListViewModel: ViewModel() {
         crimeRepository.addCrime(crime)
     }
 
+//    suspend fun deleteCrime(crime: Crime){
+//        crimeRepository.deleteCrime()
+//    }
+
 //    suspend fun loadCrimes(): List<Crime> {
 /**
  *     Loading crimes from dummy data

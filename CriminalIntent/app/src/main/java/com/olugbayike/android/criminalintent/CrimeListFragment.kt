@@ -126,6 +126,8 @@ class CrimeListFragment : Fragment() {
         }
     }
 
+
+
 //    Using coroutines on life cycle methods onStart() and on Stop().
 
 //    override fun onStart() {

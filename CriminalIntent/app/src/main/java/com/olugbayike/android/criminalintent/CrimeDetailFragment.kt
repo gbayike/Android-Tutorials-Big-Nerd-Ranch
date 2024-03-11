@@ -125,6 +125,21 @@ class CrimeDetailFragment: Fragment() {
 //            crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
         }
 
+        binding.topAppBar.setNavigationOnClickListener {
+            // Handle navigation icon press
+        }
+
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId){
+                R.id.delete_crime -> {
+                    Log.d(TAG, "delete crime pressed")
+                    deleteCrime()
+                    true
+                }
+                else -> false
+            }
+        }
+
     }
 
     override fun onDestroyView() {
@@ -153,5 +168,21 @@ class CrimeDetailFragment: Fragment() {
             }
             crimeSolved.isChecked = crime.isSolved
         }
+    }
+
+    private fun deleteCrime(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                crimeDetailViewModel.crime.collect{ crime ->
+                    crime?.let {
+                        crimeDetailViewModel.deleteCrime(it)
+                    }
+                }
+            }
+        }
+
+        findNavController().navigate(
+            CrimeDetailFragmentDirections.returnOnDelete()
+        )
     }
 }
