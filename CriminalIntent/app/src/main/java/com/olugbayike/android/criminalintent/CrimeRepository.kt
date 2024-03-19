@@ -3,6 +3,7 @@ package com.olugbayike.android.criminalintent
 import android.content.Context
 import androidx.room.Room
 import com.olugbayike.android.criminalintent.database.CrimeDatabase
+import com.olugbayike.android.criminalintent.database.migration_1_2
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -23,8 +24,7 @@ class CrimeRepository private constructor(
             CrimeDatabase::class.java,
             DATABASE_NAME
         )
-//        .createFromAsset(DATABASE_NAME)
-//        .fallbackToDestructiveMigration()
+        .addMigrations(migration_1_2)
         .build()
 
     fun getCrimes(): Flow<List<Crime>> = database.crimeDao().getCrimes()
