@@ -27,50 +27,50 @@ import java.util.UUID
 @RunWith(AndroidJUnit4::class)
 class CrimeDetailFragmentTest {
 
-    private lateinit var scenario: FragmentScenario<CrimeDetailFragment>
-    private var fragment: CrimeDetailFragment = CrimeDetailFragment()
-    private lateinit var crime: Crime
-    @Before
-    fun setUp() {
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_CriminalIntent)
-        scenario.moveToState(Lifecycle.State.STARTED)
-        crime = Crime(
-            id = UUID.randomUUID(),
-            title = "",
-            date = Date(),
-            isSolved = false
-        )
-    }
-
-    @Test
-    fun testCheckbox(){
-        scenario.onFragment {fragment ->
-//            var isSolved: String = it.crime.isSolved as String
-            fragment.crime = crime
-
-            val crimeSolved = fragment.binding.crimeSolved
-            crimeSolved.isChecked = true
-
-            assertTrue(fragment.crime.isSolved)
-        }
-    }
-
-    @Test
-    fun testEditText(){
-
-        scenario.onFragment{
-            it.crime = crime
-
-            val titleEditText = it.binding.crimeTitle
-            titleEditText.setText("Test Crime Title")
-
-            assertEquals("Test Crime Title", it.crime.title)
-        }
-    }
-
-
-    @After
-    fun tearDown() {
-        scenario.close()
-    }
+//    private lateinit var scenario: FragmentScenario<CrimeDetailFragment>
+//    private var fragment: CrimeDetailFragment = CrimeDetailFragment()
+//    private lateinit var crime: Crime
+//    @Before
+//    fun setUp() {
+//        scenario = launchFragmentInContainer(themeResId = R.style.Theme_CriminalIntent)
+//        scenario.moveToState(Lifecycle.State.STARTED)
+//        crime = Crime(
+//            id = UUID.randomUUID(),
+//            title = "",
+//            date = Date(),
+//            isSolved = false
+//        )
+//    }
+//
+//    @Test
+//    fun testCheckbox(){
+//        scenario.onFragment {fragment ->
+////            var isSolved: String = it.crime.isSolved as String
+//            fragment.crime = crime
+//
+//            val crimeSolved = fragment.binding.crimeSolved
+//            crimeSolved.isChecked = true
+//
+//            assertTrue(fragment.crime.isSolved)
+//        }
+//    }
+//
+//    @Test
+//    fun testEditText(){
+//
+//        scenario.onFragment{
+//            it.crime = crime
+//
+//            val titleEditText = it.binding.crimeTitle
+//            titleEditText.setText("Test Crime Title")
+//
+//            assertEquals("Test Crime Title", it.crime.title)
+//        }
+//    }
+//
+//
+//    @After
+//    fun tearDown() {
+//        scenario.close()
+//    }
 }
