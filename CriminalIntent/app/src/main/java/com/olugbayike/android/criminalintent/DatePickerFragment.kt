@@ -3,7 +3,9 @@ package com.olugbayike.android.criminalintent
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.icu.text.DateFormat
 import android.os.Bundle
+import android.util.Log
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -11,6 +13,12 @@ import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.navArgs
 import java.util.Calendar
 import java.util.GregorianCalendar
+import java.util.Locale
+
+
+
+
+private const val TAG = "DatePickerFragment"
 
 class DatePickerFragment: DialogFragment() {
 
@@ -20,6 +28,15 @@ class DatePickerFragment: DialogFragment() {
             _: DatePicker, year:Int, month: Int, day:Int ->
 
             val resultDate = GregorianCalendar(year, month, day).time
+
+//            val myString = DateFormat.getDateInstance().format(resultDate);
+////            val myString2 = DateFormat.getPatternInstance(DateFormat.).format(resultDate);
+//            val df = DateFormat.getDateInstance(DateFormat.FULL)
+//            val df2 = df.format(resultDate)
+//
+//            Log.d(TAG, "Initial date ${myString}")
+////            Log.d(TAG, "Second date ${myString2}")
+//            Log.d(TAG, "Second date ${df2}")
 
             setFragmentResult(REQUEST_KEY_DATE, bundleOf(BUNDLE_KEY_DATE to resultDate
             ))

@@ -188,6 +188,7 @@ class CrimeDetailFragment: Fragment() {
         ){ _, bundle ->
             val newDate =
                 bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
+
             Log.d(TAG, "KEY_DATE: ${newDate}")
             crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
         }
@@ -230,7 +231,12 @@ class CrimeDetailFragment: Fragment() {
             if (crimeTitle.text.toString() != crime.title){
                 crimeTitle.setText(crime.title)
             }
-            crimeDate.text = crime.date.toString()
+            val df = android.icu.text.DateFormat.getDateInstance(android.icu.text.DateFormat.FULL)
+            val df2 = df.format(crime.date)
+
+            Log.d(TAG, "Second date ${df2}")
+            crimeDate.text = df2
+//            crimeDate.text = crime.date.toString()
 
             crimeDate.setOnClickListener {
                 findNavController().navigate(
