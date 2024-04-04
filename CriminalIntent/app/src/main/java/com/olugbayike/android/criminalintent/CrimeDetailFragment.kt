@@ -243,6 +243,11 @@ class CrimeDetailFragment: Fragment() {
                     CrimeDetailFragmentDirections.selectTime(binding.time.text.toString())
                 )
             }
+            crimePhoto.setOnClickListener {
+                findNavController().navigate(
+                    CrimeDetailFragmentDirections.displayImage(crime.photoFileName)
+                )
+            }
             crimeSolved.isChecked = crime.isSolved
 
             crimeReport.setOnClickListener {
