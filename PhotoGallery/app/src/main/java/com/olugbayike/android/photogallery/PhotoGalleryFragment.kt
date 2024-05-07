@@ -11,10 +11,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.PagingData
+import androidx.paging.map
 import androidx.recyclerview.widget.GridLayoutManager
 import com.olugbayike.android.photogallery.api.FlickrApi
 import com.olugbayike.android.photogallery.databinding.FragmentPhotoGalleryBinding
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -29,6 +32,8 @@ class PhotoGalleryFragment: Fragment() {
         }
 
     private val photoGalleryViewModel : PhotoGalleryViewModel by viewModels()
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,7 +47,8 @@ class PhotoGalleryFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val pagingAdapter = PhotoListAdapter(GalleryComparator)
+        binding.photoGrid.adapter = pagingAdapter
 
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -52,14 +58,21 @@ class PhotoGalleryFragment: Fragment() {
 //            }catch (ex: Exception){
 //                Log.e(TAG, "Failed to fetch gallery items", ex)
 //            }
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                photoGalleryViewModel.galleryItems.collect(){ items ->
-//                    Log.d(TAG, "Response received: $items")
-                    binding.photoGrid.adapter = PhotoListAdapter(items)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                photoGalleryViewModel.galleryItems.collectLatest{ items ->
+////                    Log.d(TAG, "Response received: $items")
+//                    binding.photoGrid.adapter = PhotoListAdapter(items)
+//                }
+                photoGalleryViewModel.flow.collectLatest { pagingData ->
+                    pagingAdapter.submitData(pagingData)
                 }
             }
         }
     }
+//        lifecycleScope.launch {
+//            photoGalleryViewModel.
+//        }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
