@@ -60,6 +60,7 @@ dependencies {
     kapt ("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
     implementation ("com.squareup.retrofit2:converter-moshi:2.11.0")
     implementation("io.coil-kt:coil:2.6.0")
+    implementation ("androidx.datastore:datastore-preferences:1.1.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
