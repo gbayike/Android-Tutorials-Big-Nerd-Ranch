@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -24,6 +25,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.olugbayike.android.photogallery.databinding.FragmentPhotoGalleryBinding
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val TAG = "PhotoGalleryFragment"
@@ -69,13 +72,25 @@ class PhotoGalleryFragment: Fragment() {
 ////                    Log.d(TAG, "Response received: $items")
 //                    binding.photoGrid.adapter = PhotoListAdapter(items)
 //                }
-                photoGalleryViewModel.uiState.collect() { state ->
+
+                    photoGalleryViewModel.uiState.collect() { state ->
+//                    binding.circularProgressIndicator.visibility = View.VISIBLE
 //                    Log.d(TAG, "Response received: $items")
-                    binding.photoGrid.adapter = PhotoListAdapter(state.images)
-                    binding.searchView.setQuery(state.query, false)
-                }
+                        val uiStateCollect = async {
+                            binding.photoGrid.adapter = PhotoListAdapter(state.images)
+                            Log.d(TAG,"${state.images}")
+                            binding.searchView.setQuery(state.query, false)
+                        }
+                        uiStateCollect.await()
+
+                        binding.circularProgressIndicator.visibility = View.INVISIBLE
+                        binding.searchView.inputType = InputType.TYPE_CLASS_TEXT
+                    }
+
+
             }
         }
+
 
         binding.searchView.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
@@ -83,8 +98,9 @@ class PhotoGalleryFragment: Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Log.d(TAG, "QueryTextSubmit: $query")
                 photoGalleryViewModel.setQuery(query ?: "")
-                // on below line getting current view.
-
+                binding.circularProgressIndicator.visibility = View.VISIBLE
+                binding.searchView.inputType = InputType.TYPE_NULL
+                binding.searchView.hideKeyboard()
                 return true
             }
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -116,6 +132,8 @@ class PhotoGalleryFragment: Fragment() {
 
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
+
+
         /**
          * The second way of setting menu item click listener
           */
@@ -145,7 +163,11 @@ class PhotoGalleryFragment: Fragment() {
 //        binding.topAppBar.menu.get(R.id.menu_item_search).title
     }
 
-    
+    private fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

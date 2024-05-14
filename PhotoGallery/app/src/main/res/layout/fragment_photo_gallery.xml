@@ -3,6 +3,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,20 +28,47 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
+
+
     <!-- Note: A RecyclerView can also be used -->
-    <androidx.core.widget.NestedScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
 
     <!-- Scrollable content -->
+    <!-- app:layout_behavior="@string/appbar_scrolling_view_behavior" : adds scroll behaviour to the element-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+
+            android:id="@+id/circularProgressIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="16dp"
+            android:elevation="4dp"
+            android:indeterminate="true"
+            app:hideAnimationBehavior="inward"
+            app:showAnimationBehavior="outward"
+            />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/photo_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp">
+            android:padding="5dp"
 
-        </androidx.recyclerview.widget.RecyclerView>
-    </androidx.core.widget.NestedScrollView>
+            app:layout_constrainedHeight="true"
+            />
+
+
+    </RelativeLayout>
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

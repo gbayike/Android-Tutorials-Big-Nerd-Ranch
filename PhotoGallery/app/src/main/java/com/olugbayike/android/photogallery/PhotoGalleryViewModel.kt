@@ -49,7 +49,7 @@ class PhotoGalleryViewModel : ViewModel(){
                     }
 //                    _galleryItems.value = items
                 }catch (ex: Exception){
-                    Log.e(TAG,"Failed to fetch gallery items", ex)
+                    Log.e(TAG,"Failed to fetch gallery items $ex", ex)
                 }
             }
         }
