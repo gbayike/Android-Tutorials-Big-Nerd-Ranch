@@ -1,9 +1,10 @@
 package com.olugbayike.android.photogallery.api
 
+import com.olugbayike.android.photogallery.BuildConfig
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private const val API_KEY = "92b4f290c6c0fb0729e4cd9751d79495"
+private const val API_KEY = BuildConfig.API_KEY
 interface FlickrApi {
 
 
