@@ -1,11 +1,12 @@
 package com.olugbayike.android.photogallery.api
 
+import com.olugbayike.android.photogallery.BuildConfig
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 
-private const val API_KEY = "92b4f290c6c0fb0729e4cd9751d79495"
+private const val API_KEY = BuildConfig.API_KEY
 
 class PhotoInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
