@@ -68,6 +68,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-moshi:2.11.0")
     implementation("io.coil-kt:coil:2.6.0")
     implementation ("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("androidx.work:work-runtime:2.9.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
