@@ -3,6 +3,7 @@ package com.olugbayike.android.photogallery
 import android.app.Activity
 import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -80,7 +81,13 @@ class PhotoGalleryFragment: Fragment() {
 //                }
                 photoGalleryViewModel.uiState.collect() { state ->
 //                    Log.d(TAG, "Response received: $items")
-                    binding.photoGrid.adapter = PhotoListAdapter(state.images)
+//                    binding.photoGrid.adapter = PhotoListAdapter(state.images)
+                    binding.photoGrid.adapter = PhotoListAdapter(
+                        state.images
+                    ){  photoPageUri ->
+                        val intent = Intent(Intent.ACTION_VIEW, photoPageUri)
+                        startActivity(intent)
+                    }
                     binding.searchView.setQuery(state.query, false)
                     updatePollingState(state.isPolling)
                 }
