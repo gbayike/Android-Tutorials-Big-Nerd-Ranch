@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -82,11 +83,15 @@ class PhotoGalleryFragment: Fragment() {
                 photoGalleryViewModel.uiState.collect() { state ->
 //                    Log.d(TAG, "Response received: $items")
                     binding.photoGrid.adapter = PhotoListAdapter(state.images){  photoPageUri ->
-                        findNavController().navigate(
-                            PhotoGalleryFragmentDirections.showPhoto(
-                                photoPageUri
-                            )
-                        )
+//                        findNavController().navigate(
+//                            PhotoGalleryFragmentDirections.showPhoto(
+//                                photoPageUri
+//                            )
+//                        )
+                        CustomTabsIntent.Builder()
+                            .setShowTitle(true)
+                            .build()
+                            .launchUrl(requireContext(), photoPageUri)
                     }
                     binding.searchView.setQuery(state.query, false)
                     updatePollingState(state.isPolling)
