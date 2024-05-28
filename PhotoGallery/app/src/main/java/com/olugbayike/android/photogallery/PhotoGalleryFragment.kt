@@ -22,6 +22,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -80,7 +81,13 @@ class PhotoGalleryFragment: Fragment() {
 //                }
                 photoGalleryViewModel.uiState.collect() { state ->
 //                    Log.d(TAG, "Response received: $items")
-                    binding.photoGrid.adapter = PhotoListAdapter(state.images)
+                    binding.photoGrid.adapter = PhotoListAdapter(state.images){  photoPageUri ->
+                        findNavController().navigate(
+                            PhotoGalleryFragmentDirections.showPhoto(
+                                photoPageUri
+                            )
+                        )
+                    }
                     binding.searchView.setQuery(state.query, false)
                     updatePollingState(state.isPolling)
                 }

@@ -1,5 +1,6 @@
 package com.olugbayike.android.photogallery
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,15 +11,17 @@ import com.olugbayike.android.photogallery.databinding.ListItemGalleryBinding
 class PhotoViewHolder (
     private val binding: ListItemGalleryBinding
 ) :RecyclerView.ViewHolder(binding.root){
-    fun bind(galleryItem: GalleryItem){
+    fun bind(galleryItem: GalleryItem, onItemClicked: (Uri) -> Unit){
         binding.itemImageView.load(galleryItem.url){
             placeholder(R.drawable.image_icon)
 
         }
+        binding.root.setOnClickListener { onItemClicked(galleryItem.photoPageUri) }
     }
 }
 class PhotoListAdapter (
-    private val galleryItems: List<GalleryItem>
+    private val galleryItems: List<GalleryItem>,
+    private val onItemClicked: (Uri) -> Unit
 ): RecyclerView.Adapter<PhotoViewHolder>(){
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -36,7 +39,7 @@ class PhotoListAdapter (
         position: Int
     ) {
         val item = galleryItems[position]
-        holder.bind(item)
+        holder.bind(item, onItemClicked)
     }
 
 }
