@@ -83,15 +83,19 @@ class PhotoGalleryFragment: Fragment() {
                 photoGalleryViewModel.uiState.collect() { state ->
 //                    Log.d(TAG, "Response received: $items")
                     binding.photoGrid.adapter = PhotoListAdapter(state.images){  photoPageUri ->
-//                        findNavController().navigate(
-//                            PhotoGalleryFragmentDirections.showPhoto(
-//                                photoPageUri
-//                            )
-//                        )
-                        CustomTabsIntent.Builder()
-                            .setShowTitle(true)
-                            .build()
-                            .launchUrl(requireContext(), photoPageUri)
+                        findNavController().navigate(
+                            PhotoGalleryFragmentDirections.showPhoto(
+                                photoPageUri
+                            )
+                        )
+
+                        /**
+                         * Code for custom chrome tabs
+                         */
+//                        CustomTabsIntent.Builder()
+//                            .setShowTitle(true)
+//                            .build()
+//                            .launchUrl(requireContext(), photoPageUri)
                     }
                     binding.searchView.setQuery(state.query, false)
                     updatePollingState(state.isPolling)

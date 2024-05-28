@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             app:title="@string/app_name"
-            app:navigationIcon="@drawable/ic_close_24" />
+            app:navigationIcon="@drawable/ic_arrow_back_ios_new_24" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

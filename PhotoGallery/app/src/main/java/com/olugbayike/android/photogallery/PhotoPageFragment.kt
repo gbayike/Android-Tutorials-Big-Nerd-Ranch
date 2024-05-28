@@ -1,5 +1,6 @@
 package com.olugbayike.android.photogallery
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -21,6 +22,7 @@ class PhotoPageFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,7 +34,12 @@ class PhotoPageFragment : Fragment() {
         binding.apply {
             topAppBar.setNavigationOnClickListener {
                 Log.d(TAG, "Navigation clicked")
-                findNavController().popBackStack()
+
+                if(webView.canGoBack()){
+                    webView.goBack()
+                }else{
+                    findNavController().popBackStack()
+                }
             }
             progressBar.max = 100
             webView.apply{
