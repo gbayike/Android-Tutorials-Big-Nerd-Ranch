@@ -21,10 +21,23 @@
             android:layout_gravity="center"
             android:src="@drawable/sun"/>
     </FrameLayout>
-    <View
+    <FrameLayout
+        android:id="@+id/sea"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.39"
-        android:background="@color/sea"/>
+        android:background="@color/sea"
+        >
+
+        <ImageView
+            android:id="@+id/sun_reflection"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center_horizontal"
+            android:rotation="180"
+            android:src="@drawable/sun_reflection"
+
+            />
+    </FrameLayout>
 
 </LinearLayout>
