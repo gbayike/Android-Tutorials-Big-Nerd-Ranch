@@ -1,5 +1,6 @@
 package com.olugbayike.android.codapizza
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.olugbayike.android.codapizza.model.Topping
 import com.olugbayike.android.codapizza.model.ToppingPlacement
 
+
+val TAG = "ToppingCell"
 
 @Preview
 @Composable
@@ -46,6 +49,7 @@ fun ToppingCell(
     modifier : Modifier = Modifier,
     onClickTopping: () -> Unit
 ) {
+//    Log.d(TAG, "Called ToppingCell for $topping")
     Row (
 
         verticalAlignment = Alignment.CenterVertically,
@@ -56,7 +60,7 @@ fun ToppingCell(
     ){
         Checkbox(
             checked = (placement != null),
-            onCheckedChange = {/* TODO*/ }
+            onCheckedChange = { onClickTopping() }
         )
         Column (
             modifier = Modifier
