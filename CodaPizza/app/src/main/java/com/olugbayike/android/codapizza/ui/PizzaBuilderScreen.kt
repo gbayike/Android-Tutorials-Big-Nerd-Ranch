@@ -1,12 +1,23 @@
 package com.olugbayike.android.codapizza.ui
 
 import android.icu.text.NumberFormat
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
@@ -23,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.olugbayike.android.codapizza.R
 import com.olugbayike.android.codapizza.ToppingCell
 import com.olugbayike.android.codapizza.model.Pizza
+import com.olugbayike.android.codapizza.model.Size
 import com.olugbayike.android.codapizza.model.Topping
 import com.olugbayike.android.codapizza.model.ToppingPlacement
 
@@ -35,11 +48,22 @@ fun PizzaBuilderScreen(
     modifier: Modifier = Modifier,
 ){
     var pizza by rememberSaveable {
-        mutableStateOf(Pizza())
+        mutableStateOf(Pizza(Size.Small))
     }
+
     Column(
         modifier = modifier
     ) {
+        SizeDropDown(
+//            expanded = expanded,
+            pizza = pizza,
+            onEditSize = { pizza = it },
+//            onDismissRequest = { },
+            modifier = Modifier
+                    .fillMaxWidth()
+//                .weight(0.5f)
+        )
+
         ToppingList(
             pizza = pizza,
             onEditPizza = { pizza = it },
@@ -143,5 +167,39 @@ private fun OrderButton(
             text = stringResource(id = R.string.place_order_button, price)
                 .toUpperCase(Locale.current)
         )
+    }
+}
+
+@Composable
+private fun SizeDropDown(
+//    expanded: Boolean,
+    pizza: Pizza,
+    onEditSize: (Pizza) -> Unit,
+    modifier: Modifier = Modifier,
+//    onDismissRequest: () -> Unit
+){
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentSize(Alignment.TopEnd)) {
+        IconButton(onClick = { expanded = true }) {
+            Icon(Icons.Default.MoreVert, contentDescription = "Localized description")
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {
+                expanded = false
+            }
+        ) {
+            for (size in Size.values())
+                DropdownMenuItem(
+                    text = { Text(text = "$size") },
+                    onClick = {
+                        onEditSize(pizza.changeSize(size))
+                        expanded = false
+                    }
+                )
+        }
     }
 }
