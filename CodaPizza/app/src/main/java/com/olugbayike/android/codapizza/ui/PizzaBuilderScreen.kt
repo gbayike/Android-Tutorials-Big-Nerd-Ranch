@@ -1,13 +1,19 @@
 package com.olugbayike.android.codapizza.ui
 
 import android.icu.text.NumberFormat
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +35,7 @@ import com.olugbayike.android.codapizza.model.ToppingPlacement
 
 val TAG = "pizzaBuilderScreen"
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun PizzaBuilderScreen(
@@ -37,24 +44,41 @@ fun PizzaBuilderScreen(
     var pizza by rememberSaveable {
         mutableStateOf(Pizza())
     }
-    Column(
-        modifier = modifier
-    ) {
-        ToppingList(
-            pizza = pizza,
-            onEditPizza = { pizza = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f, fill = true)
-        )
 
-        OrderButton(
-            pizza = pizza,
+    Scaffold (
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                title = { Text (text = stringResource(id = R.string.app_name)) }
+            )
+        }
+    ){ innerPadding ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        )
+                .padding(innerPadding),
+//            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ){
+        ToppingList(
+                pizza = pizza,
+                onEditPizza = { pizza = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f, fill = true)
+            )
+
+            OrderButton(
+                pizza = pizza,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+        }
     }
+
 }
 
 //private var pizza = Pizza(

@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.olugbayike.android.codapizza.model.Topping
 import com.olugbayike.android.codapizza.model.ToppingPlacement
+import com.olugbayike.android.codapizza.ui.AppTheme
 import com.olugbayike.android.codapizza.ui.PizzaBuilderScreen
 
 class MainActivity : AppCompatActivity() {
@@ -30,7 +31,9 @@ class MainActivity : AppCompatActivity() {
 //                placement = ToppingPlacement.Left,
 //                onClickTopping = {}
 //            )
-            PizzaBuilderScreen()
+            AppTheme {
+                PizzaBuilderScreen()
+            }
         }
     }
 }
