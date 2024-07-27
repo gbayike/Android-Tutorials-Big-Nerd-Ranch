@@ -17,4 +17,6 @@
     <string name="topping_pineapple">Pineapple</string>
 
     <string name="pizza_preview">Pizza preview</string>
+
+    <string name="order_placed_toast">Order submitted!!</string>
 </resources>

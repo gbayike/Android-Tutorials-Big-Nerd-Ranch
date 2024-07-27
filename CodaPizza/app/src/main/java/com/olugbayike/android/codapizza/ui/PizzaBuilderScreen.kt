@@ -1,19 +1,32 @@
 package com.olugbayike.android.codapizza.ui
 
 import android.icu.text.NumberFormat
+import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +34,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
@@ -45,24 +61,34 @@ fun PizzaBuilderScreen(
         mutableStateOf(Pizza())
     }
 
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
     Scaffold (
-        modifier = modifier,
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+            .fillMaxSize(),
         topBar = {
-            TopAppBar(
+            LargeTopAppBar(
+                modifier = Modifier.height(IntrinsicSize.Min),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    scrolledContainerColor = MaterialTheme.colorScheme.primary
                 ),
-                title = { Text (text = stringResource(id = R.string.app_name)) }
+                title = {
+                        Text(text = stringResource(id = R.string.app_name))
+                },
+
+                scrollBehavior = scrollBehavior
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.systemBars
     ){ innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding),
 //            verticalArrangement = Arrangement.spacedBy(16.dp),
         ){
-        ToppingList(
+            ToppingList(
                 pizza = pizza,
                 onEditPizza = { pizza = it },
                 modifier = Modifier
@@ -161,9 +187,12 @@ private fun OrderButton(
     pizza: Pizza,
     modifier: Modifier = Modifier,
 ){
+    val context = LocalContext.current
     Button(
         modifier = modifier,
-        onClick = { /*TODO*/ }
+        onClick = {
+            Toast.makeText(context, R.string.order_placed_toast, Toast.LENGTH_LONG).show()
+        }
     ) {
         val currencyFormatter = remember {
             NumberFormat.getCurrencyInstance()

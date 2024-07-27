@@ -1,22 +1,26 @@
 package com.olugbayike.android.codapizza
 
+import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.compose.AppTheme
 import com.olugbayike.android.codapizza.model.Topping
 import com.olugbayike.android.codapizza.model.ToppingPlacement
-import com.olugbayike.android.codapizza.ui.AppTheme
 import com.olugbayike.android.codapizza.ui.PizzaBuilderScreen
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
