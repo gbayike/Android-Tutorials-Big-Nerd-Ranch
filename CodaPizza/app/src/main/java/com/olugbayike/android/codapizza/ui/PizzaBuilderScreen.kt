@@ -1,7 +1,10 @@
 package com.olugbayike.android.codapizza.ui
 
 import android.icu.text.NumberFormat
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,12 +31,16 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -47,6 +54,10 @@ import com.olugbayike.android.codapizza.ToppingCell
 import com.olugbayike.android.codapizza.model.Pizza
 import com.olugbayike.android.codapizza.model.Topping
 import com.olugbayike.android.codapizza.model.ToppingPlacement
+import kotlinx.coroutines.android.awaitFrame
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 val TAG = "pizzaBuilderScreen"
@@ -61,10 +72,22 @@ fun PizzaBuilderScreen(
         mutableStateOf(Pizza())
     }
 
+//    var isRotated by rememberSaveable {
+//        mutableStateOf(false)
+//    }
+    var targetValue by rememberSaveable {
+        mutableStateOf(0f)
+    }
+    val rotateValue by animateFloatAsState(
+        targetValue = targetValue,
+        animationSpec = tween(durationMillis = 1000)
+    )
+
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     Scaffold (
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize(),
         topBar = {
             LargeTopAppBar(
@@ -93,17 +116,23 @@ fun PizzaBuilderScreen(
                 onEditPizza = { pizza = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f, fill = true)
+                    .weight(1f, fill = true),
+                rotateValue = rotateValue
             )
 
             OrderButton(
                 pizza = pizza,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(16.dp),
+                rotatePizza = {
+                    targetValue = it
+                    Log.d(TAG, "Rotate Value: $rotateValue")}
             )
         }
     }
+
+
 
 }
 
@@ -125,6 +154,7 @@ private fun ToppingList(
     modifier: Modifier = Modifier,
     pizza: Pizza,
     onEditPizza: (Pizza) -> Unit,
+    rotateValue: Float
 
 ){
 //    var showToppingPlacementDialog by rememberSaveable {
@@ -154,7 +184,9 @@ private fun ToppingList(
         item {
             PizzaHeroImage(
                 pizza = pizza,
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .padding(16.dp)
+                    .graphicsLayer(rotationZ = rotateValue)
             )
         }
         items(Topping.values()){ topping ->
@@ -186,12 +218,23 @@ private fun ToppingList(
 private fun OrderButton(
     pizza: Pizza,
     modifier: Modifier = Modifier,
+    rotatePizza: (Float) -> Unit
 ){
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+//    val alpha: Float by animateFloatAsState(360f)
+
     Button(
         modifier = modifier,
         onClick = {
-            Toast.makeText(context, R.string.order_placed_toast, Toast.LENGTH_LONG).show()
+            coroutineScope.launch {
+                Toast.makeText(context, R.string.order_placed_toast, Toast.LENGTH_LONG).show()
+
+                rotatePizza(180f)
+                delay(1000)
+                rotatePizza(0f)
+            }
+
         }
     ) {
         val currencyFormatter = remember {
@@ -203,4 +246,6 @@ private fun OrderButton(
                 .toUpperCase(Locale.current)
         )
     }
+
+
 }
